@@ -1,0 +1,5 @@
+{
+  "name": "Neon City Planner",
+  "description": "A 3D isometric city builder with day/night cycles, particle effects, and economy management.",
+  "requestFramePermissions": []
+}
