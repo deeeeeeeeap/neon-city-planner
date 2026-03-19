@@ -1,87 +1,65 @@
-# Neon City Planner
+# 🌃 Neon City Planner (霓虹城市规划师)
 
-Cloudflare Workers deployment target for the Neon City Planner game. The app is a single-repo full-stack project:
+> 这是一个专为**城乡规划与建筑类新生**打造的 **趣味交互式教学项目**。在赛博朋克的霓虹光影中，亲自体验一座城市的生长脉络与发展逻辑！
 
-- React + Vite SPA
-- Hono API on the same Worker
-- D1 leaderboard storage
-- TailwindCSS v4 local build
+---
 
-## Requirements
+## 🎯 教学初衷：为什么做这个项目？
 
-- Node.js 20+
-- npm
-- Cloudflare account with `wrangler login`
+对于刚刚接触“城市规划”的新生来说，复杂的专业词汇和漫长的规划图纸往往容易让人望而生畏。
+**《霓虹城市规划师》** 旨在通过一个轻量级、极具视觉冲击力的微型沙盒，将城市规划中最核心的动态平衡逻辑拆解为生动的游戏体验。
 
-## Install
+在这里，你不需要画 CAD，也不用学 GIS，只需要通过简单的鼠标点击：
+- 直观感受 **住宅、商业、工业与绿地** 之间相互博弈的关系
+- 亲手平衡 **资金 (Budget)、人口 (Population)、幸福度 (Happiness) 与 污染 (Pollution)** 构成的城市“不可能三角”
+- 理解空间布局对环境的切实影响（如：工厂必须远离居民区，否则幸福度将遭遇断崖式下跌）
+
+这不仅仅是一个 Web 全栈技术项目，更是一堂**献给规划新生的“赛博”游戏化实践课**。
+
+---
+
+## 🎮 核心规划体验 (Gameplay)
+
+在有限的 **10 个回合** 和起始资金下，你作为“赛博大统领 (Mayor)”，需要在 16x16 的等距视角（Isometric）网格上布局你的都市：
+
+*   🟡 **居住用地 (Residential)**：吸引人口涌入的基础，但周围如果有污染源，居民将非常痛苦。
+*   🔵 **商业用地 (Commercial)**：提升居民的幸福感并赚取税收收入的核心引擎。
+*   🟤 **工业用地 (Industrial)**：为城市带来丰厚暴利和就业，但随之而来的是铺天盖地的赛博雾霾（重污染）。
+*   🌲 **绿地公园 (Park)**：对抗污染、净化环境并提升幸福感的城市绿肺。
+*   🛣️ **交通道路 (Road)**：连接城市的血脉，没有道路连通，建筑将无法发挥其最大效能。
+
+---
+
+## 💻 现代极简技术栈 (The Tech Stack)
+
+除了作为教学工具，本作也是一个学习现代 Web 开发的优秀全栈模板。前端采用极具未来感的**拟态玻璃设计 (Glassmorphism)** 界面与纯 CSS 构建的 3D 透视建筑库，后端则彻底拥抱了 Serverless：
+
+*   **前端视觉**：`React 19` + `Vite` + `Tailwind CSS v4`
+*   **状态与数据流动**：纯 React `useReducer` 实现无副作用“游戏引擎状态机”
+*   **后端 API 解析**：`Cloudflare Workers` + `Hono` 极简路由处理
+*   **数据库接入**：`Cloudflare D1` (Serverless SQLite) 提供全球排行榜统计
+*   **零服务器部署**：全栈同域托管，一次 `wrangler deploy` 完成构建+发布
+
+---
+
+## 🚀 快速上手 (Quick Start)
+
+如果你想在本地接手市长职务开始开发：
 
 ```bash
+# 1. 安装依赖
 npm install
-```
 
-## Local development
-
-Start the Vite + Cloudflare development environment:
-
-```bash
+# 2. 启动本地开发与预览服务器
 npm run dev
+
+# 3. 浏览你的城市！
+打开浏览器访问 http://localhost:3000
 ```
 
-## Type check
+*如果你希望部署到你自己的 Cloudflare 节点：*
+你需要配置好 `wrangler` 认证，并在本地创建与绑定 D1 数据库资源，随后执行 `npm run deploy` 即可一键推送到全球边缘网络。
 
-```bash
-npx tsc --noEmit
-```
+---
 
-## Build
-
-```bash
-npm run build
-```
-
-## D1 migration
-
-Apply the local migration:
-
-```bash
-npm run db:migrate:local
-```
-
-Apply the remote migration:
-
-```bash
-npm run db:migrate:remote
-```
-
-## Deploy
-
-1. Update `wrangler.jsonc` with your real D1 `database_id`
-2. Log in to Cloudflare:
-
-```bash
-wrangler login
-```
-
-3. Deploy:
-
-```bash
-npm run deploy
-```
-
-## Project structure
-
-```text
-index.html
-index.tsx
-index.css
-worker.ts
-wrangler.jsonc
-migrations/
-src/
-  api/
-  components/
-  game/
-  i18n/
-  store/
-  types.ts
-```
+*“在光与影的切割中，寻找赛博都市里那难得的乌托邦平衡。” —— 规划新生启蒙必修课*
