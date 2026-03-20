@@ -16,7 +16,7 @@
     {
       "binding": "DB",
       "database_name": "paper-city-planner-db",
-      "database_id": "REPLACE_WITH_YOUR_D1_ID"
+      "database_id": "650bcaff-941f-47ff-92d4-55db9382aeea"
     }
   ]
 }
