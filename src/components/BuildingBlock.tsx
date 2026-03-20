@@ -15,8 +15,8 @@ const BuildingBlock = React.memo(({ type, connect, age, dayPhase, isPreview }: P
   const info = BUILDING_TYPES[type];
   const height = info.heightClass || 'h-8';
   const isNew = age === 0;
-  const animationClass = isNew ? 'building-drop-in' : '';
   const isPark = type === 'PARK';
+  const animationClass = isNew ? (isPark ? 'park-grow-in' : 'building-drop-in') : '';
 
   const style = {
     backgroundColor: info.color,
