@@ -11,7 +11,7 @@
     {
       "binding": "DB",
       "database_name": "neon-city-planner-db",
-      "database_id": "REPLACE_WITH_YOUR_D1_DATABASE_ID"
+      "database_id": "20666a8a-2145-46ec-8838-428ad1eaa1a3"
     }
   ]
 }
