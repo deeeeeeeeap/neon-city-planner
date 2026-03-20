@@ -14,6 +14,42 @@ interface Props {
   onMouseEnter: () => void;
 }
 
+const RoadTile = ({ connect, preview = false }: { connect: { top: boolean; bottom: boolean; left: boolean; right: boolean }; preview?: boolean }) => {
+  const asphalt = preview ? 'bg-slate-500/80' : 'bg-slate-600';
+  const shoulder = preview ? 'bg-slate-500/25' : 'bg-slate-800/80';
+  const edgeLine = preview ? 'border-white/35' : 'border-white/45';
+  const centerLine = preview ? 'border-amber-100/45' : 'border-amber-100/70';
+
+  const RoadArm = ({ className }: { className: string }) => (
+    <div className={`absolute ${className} ${asphalt} shadow-[inset_0_0_0_1px_rgba(255,255,255,0.03)]`} />
+  );
+
+  const Marking = ({ className, vertical = false }: { className: string; vertical?: boolean }) => (
+    <div
+      className={`absolute ${className} ${vertical ? 'w-0.5 border-l-2' : 'h-0.5 border-t-2'} border-dashed ${centerLine}`}
+    />
+  );
+
+  return (
+    <div className="pointer-events-none absolute inset-0 flex items-center justify-center" style={{ transform: 'translateZ(1px)' }}>
+      <div className={`absolute inset-0 rounded-[8px] ${shoulder}`} />
+      <RoadArm className="left-1/2 top-1/2 h-6 w-6 -translate-x-1/2 -translate-y-1/2 rounded-[4px]" />
+      {connect.top && <RoadArm className="left-1/2 top-0 h-[55%] w-6 -translate-x-1/2 rounded-t-[4px]" />}
+      {connect.bottom && <RoadArm className="bottom-0 left-1/2 h-[55%] w-6 -translate-x-1/2 rounded-b-[4px]" />}
+      {connect.left && <RoadArm className="left-0 top-1/2 h-6 w-[55%] -translate-y-1/2 rounded-l-[4px]" />}
+      {connect.right && <RoadArm className="right-0 top-1/2 h-6 w-[55%] -translate-y-1/2 rounded-r-[4px]" />}
+
+      <div className={`absolute inset-[5px] rounded-[6px] border ${edgeLine}`} />
+      {connect.top && <Marking className="left-1/2 top-0 h-[42%] -translate-x-1/2" vertical />}
+      {connect.bottom && <Marking className="bottom-0 left-1/2 h-[42%] -translate-x-1/2" vertical />}
+      {connect.left && <Marking className="left-0 top-1/2 w-[42%] -translate-y-1/2" />}
+      {connect.right && <Marking className="right-0 top-1/2 w-[42%] -translate-y-1/2" />}
+
+      <div className={`absolute left-1/2 top-1/2 h-1.5 w-1.5 -translate-x-1/2 -translate-y-1/2 rounded-full ${preview ? 'bg-white/35' : 'bg-white/55'}`} />
+    </div>
+  );
+};
+
 const GridCell = React.memo(
   ({ cell, grid, currentTurn, dayPhase, dragPreview, onMouseDown, onMouseEnter }: Props) => {
     const { x, y, type } = cell;
@@ -40,7 +76,15 @@ const GridCell = React.memo(
     const previewConnect = { top: false, bottom: false, left: false, right: false };
 
     return (
-      <div onMouseDown={onMouseDown} onMouseEnter={onMouseEnter} className="group relative h-12 w-12 cursor-pointer" style={{ transformStyle: 'preserve-3d' }}>
+      <div
+        data-grid-cell="true"
+        data-x={x}
+        data-y={y}
+        onMouseDown={onMouseDown}
+        onMouseEnter={onMouseEnter}
+        className="group relative h-12 w-12 cursor-pointer"
+        style={{ transformStyle: 'preserve-3d' }}
+      >
         <div
           className={`absolute inset-0 border border-white/5 transition-colors duration-500 ${
             isOcean ? 'bg-cyan-900/80' : isEmpty ? 'bg-slate-800 hover:bg-slate-700' : 'bg-slate-800'
@@ -54,11 +98,8 @@ const GridCell = React.memo(
         )}
 
         {dragPreview === 'ROAD' && (
-          <div className="pointer-events-none absolute inset-0 z-30 flex items-center justify-center opacity-60" style={{ transform: 'translateZ(2px)' }}>
-            <div className="absolute inset-0 bg-slate-700" />
-            <div className="relative flex h-full w-full items-center justify-center">
-              <div className="z-10 h-1.5 w-1.5 rounded-full bg-white/50" />
-            </div>
+          <div className="absolute inset-0 z-30 opacity-80">
+            <RoadTile connect={connect} preview />
           </div>
         )}
 
@@ -73,20 +114,7 @@ const GridCell = React.memo(
         {!isEmpty && !isOcean && !isRoad && <BuildingBlock type={type} connect={connect} age={age} dayPhase={dayPhase} />}
 
         {isRoad && (
-          <div className="pointer-events-none absolute inset-0 flex items-center justify-center" style={{ transform: 'translateZ(1px)' }}>
-            <div className="absolute inset-0 rounded-sm bg-slate-600" />
-            {connect.top && <div className="absolute top-0 h-[55%] w-6 bg-slate-600" />}
-            {connect.bottom && <div className="absolute bottom-0 h-[55%] w-6 bg-slate-600" />}
-            {connect.left && <div className="absolute left-0 h-6 w-[55%] bg-slate-600" />}
-            {connect.right && <div className="absolute right-0 h-6 w-[55%] bg-slate-600" />}
-            <div className="relative flex h-full w-full items-center justify-center">
-              <div className="z-10 h-1.5 w-1.5 rounded-full bg-white/50" />
-              {connect.top && <div className="absolute top-0 h-[50%] w-0.5 border-l-2 border-dashed border-white/60" />}
-              {connect.bottom && <div className="absolute bottom-0 h-[50%] w-0.5 border-l-2 border-dashed border-white/60" />}
-              {connect.left && <div className="absolute left-0 h-0.5 w-[50%] border-t-2 border-dashed border-white/60" />}
-              {connect.right && <div className="absolute right-0 h-0.5 w-[50%] border-t-2 border-dashed border-white/60" />}
-            </div>
-          </div>
+          <RoadTile connect={connect} />
         )}
 
         {isOcean && (

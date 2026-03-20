@@ -230,6 +230,47 @@ export default function App() {
     applyEffects(result.effects);
   }, [applyEffects, showNotification, state.grid, state.resources, state.selectedTool, store, t.not_enough_money]);
 
+  useEffect(() => {
+    if (!dragStart) {
+      return undefined;
+    }
+
+    const handleDocumentMouseMove = (event: MouseEvent) => {
+      const target = document.elementFromPoint(event.clientX, event.clientY);
+      const cellElement = target instanceof HTMLElement ? target.closest<HTMLElement>('[data-grid-cell="true"]') : null;
+      if (!cellElement) {
+        return;
+      }
+
+      const x = Number.parseInt(cellElement.dataset.x ?? '', 10);
+      const y = Number.parseInt(cellElement.dataset.y ?? '', 10);
+      if (Number.isNaN(x) || Number.isNaN(y)) {
+        return;
+      }
+
+      const preview = calculateDragPreview(
+        dragStartRef.current ?? dragStart,
+        { x, y },
+        state.selectedTool,
+        state.grid,
+        state.resources,
+      );
+      setDragPreview(new Set(preview.cells));
+    };
+
+    const handleDocumentMouseUp = () => {
+      handleMouseUp();
+    };
+
+    document.addEventListener('mousemove', handleDocumentMouseMove);
+    document.addEventListener('mouseup', handleDocumentMouseUp);
+
+    return () => {
+      document.removeEventListener('mousemove', handleDocumentMouseMove);
+      document.removeEventListener('mouseup', handleDocumentMouseUp);
+    };
+  }, [dragStart, handleMouseUp, state.grid, state.resources, state.selectedTool]);
+
   const uploadScore = useCallback(
     async (entry: LeaderboardEntry) => {
       try {

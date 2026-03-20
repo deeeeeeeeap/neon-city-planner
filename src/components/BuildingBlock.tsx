@@ -76,68 +76,60 @@ const BuildingBlock = React.memo(({ type, connect, age, dayPhase, isPreview }: P
 
   return (
     <div className={`absolute inset-1 pointer-events-none ${animationClass}`} style={{ transformStyle: 'preserve-3d' }}>
-      {!connect.bottom && (
-        <div
-          className={`absolute bottom-0 left-0 right-0 ${height} brightness-90`}
-          style={{ ...style, ...faceStyle, transform: 'rotateX(-90deg)', transformOrigin: 'bottom' }}
-        >
-          {type === 'COMMERCIAL' && (
-            <div
-              className="absolute bottom-0 left-0 right-0 h-4 origin-bottom bg-red-500"
-              style={{
-                transform: 'rotateX(45deg)',
-                backgroundImage:
-                  'repeating-linear-gradient(90deg, #ef4444, #ef4444 6px, #ffffff 6px, #ffffff 12px)',
-                boxShadow: '0 5px 5px rgba(0,0,0,0.3)',
-              }}
-            />
-          )}
-        </div>
-      )}
+      <div
+        className={`absolute bottom-0 left-0 right-0 ${height} brightness-90`}
+        style={{ ...style, ...faceStyle, transform: 'rotateX(-90deg)', transformOrigin: 'bottom' }}
+      >
+        {type === 'COMMERCIAL' && (
+          <div
+            className="absolute bottom-0 left-0 right-0 h-4 origin-bottom bg-red-500"
+            style={{
+              transform: 'rotateX(45deg)',
+              backgroundImage:
+                'repeating-linear-gradient(90deg, #ef4444, #ef4444 6px, #ffffff 6px, #ffffff 12px)',
+              boxShadow: '0 5px 5px rgba(0,0,0,0.3)',
+            }}
+          />
+        )}
+      </div>
 
-      {!connect.left && (
-        <div
-          className={`absolute left-0 bottom-0 top-0 ${height} overflow-hidden brightness-75`}
-          style={{ ...style, ...faceStyle, width: '100%', transform: 'rotateY(90deg)', transformOrigin: 'left' }}
-        >
-          {type === 'RESIDENTIAL' && (
-            <div className="flex h-full w-full flex-col justify-evenly">
-              <div className="flex w-full justify-evenly">
-                <WindowLight />
-                <WindowLight />
-              </div>
-              <div className="flex w-full justify-evenly">
-                <WindowLight />
-                <WindowLight />
-              </div>
+      <div
+        className={`absolute left-0 bottom-0 top-0 ${height} overflow-hidden brightness-75`}
+        style={{ ...style, ...faceStyle, width: '100%', transform: 'rotateY(90deg)', transformOrigin: 'left' }}
+      >
+        {type === 'RESIDENTIAL' && (
+          <div className="flex h-full w-full flex-col justify-evenly">
+            <div className="flex w-full justify-evenly">
+              <WindowLight />
+              <WindowLight />
             </div>
-          )}
-          {type === 'COMMERCIAL' && <div className="absolute inset-2 border border-white/20 bg-blue-900/30" />}
-        </div>
-      )}
-
-      {!connect.right && (
-        <div
-          className={`absolute right-0 bottom-0 top-0 ${height} overflow-hidden brightness-50`}
-          style={{ ...style, ...faceStyle, width: '100%', transform: 'rotateY(90deg)', transformOrigin: 'right' }}
-        >
-          {type === 'RESIDENTIAL' && (
-            <div className="flex h-full w-full flex-col justify-evenly">
-              <div className="flex w-full justify-evenly">
-                <WindowLight />
-                <WindowLight />
-              </div>
+            <div className="flex w-full justify-evenly">
+              <WindowLight />
+              <WindowLight />
             </div>
-          )}
-        </div>
-      )}
+          </div>
+        )}
+        {type === 'COMMERCIAL' && <div className="absolute inset-2 border border-white/20 bg-blue-900/30" />}
+      </div>
 
-      {!connect.top && (
-        <div
-          className={`absolute left-0 right-0 top-0 ${height} brightness-50`}
-          style={{ ...style, ...faceStyle, transform: 'rotateX(-90deg)', transformOrigin: 'top' }}
-        />
-      )}
+      <div
+        className={`absolute right-0 bottom-0 top-0 ${height} overflow-hidden brightness-50`}
+        style={{ ...style, ...faceStyle, width: '100%', transform: 'rotateY(90deg)', transformOrigin: 'right' }}
+      >
+        {type === 'RESIDENTIAL' && (
+          <div className="flex h-full w-full flex-col justify-evenly">
+            <div className="flex w-full justify-evenly">
+              <WindowLight />
+              <WindowLight />
+            </div>
+          </div>
+        )}
+      </div>
+
+      <div
+        className={`absolute left-0 right-0 top-0 ${height} brightness-50`}
+        style={{ ...style, ...faceStyle, transform: 'rotateX(-90deg)', transformOrigin: 'top' }}
+      />
 
       <div
         className="absolute inset-0 flex items-center justify-center transition-all duration-1000"
