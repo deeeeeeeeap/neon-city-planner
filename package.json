@@ -20,7 +20,6 @@
   },
   "devDependencies": {
     "@cloudflare/vite-plugin": "^1.29.1",
-    "@cloudflare/workerd-windows-64": "^1.20260317.1",
     "@cloudflare/workers-types": "^4.20260317.1",
     "@tailwindcss/vite": "^4.2.2",
     "@types/node": "^22.14.0",
@@ -28,6 +27,7 @@
     "tailwindcss": "^4.2.2",
     "typescript": "~5.8.2",
     "vite": "^6.2.0",
+    "workerd": "^1.20260317.1",
     "wrangler": "^4.75.0"
   }
 }
