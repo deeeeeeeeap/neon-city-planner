@@ -114,39 +114,95 @@ function BoardBackdrop({ width, height }: { width: number; height: number }) {
 
 /**
  * 计算建筑入口朝向（找最近道路并返回朝向角度）
- * 遍历整个 grid 找曼哈顿距离最近的道路，用 atan2 算精确方向
+ * 1) 先检测直接四邻是否有道路（最可靠）
+ * 2) 否则收集所有最近道路，按方向投票决定朝向
  * 返回弧度值：0=南(+Z), π/2=西, π=北, -π/2=东
  */
 function computeFacingAngle(grid: Cell[][], cx: number, cy: number): number {
   const rows = grid.length;
   const cols = grid[0]?.length ?? 0;
-  let bestDist = Infinity;
-  let bestDx = 0;
-  let bestDy = 1; // 默认朝南
-  // 遍历找所有道路，取曼哈顿距离最近的
-  for (let gy = 0; gy < rows; gy++) {
-    for (let gx = 0; gx < cols; gx++) {
-      if (grid[gy]?.[gx]?.type !== 'ROAD') continue;
-      const dist = Math.abs(gx - cx) + Math.abs(gy - cy);
-      if (dist < bestDist) {
-        bestDist = dist;
-        bestDx = gx - cx; // 正=东, 负=西
-        bestDy = gy - cy; // 正=南(行号增大), 负=北
-      }
+
+  // 四个主方向定义：[dx, dy, 旋转角度]
+  const DIRS: [number, number, number][] = [
+    [0, 1, 0],              // 南(+Z) → 0
+    [1, 0, -Math.PI / 2],   // 东(+X) → -π/2
+    [-1, 0, Math.PI / 2],   // 西(-X) → π/2
+    [0, -1, Math.PI],       // 北(-Z) → π
+  ];
+
+  // 第一步：检测直接四邻是否有道路
+  for (const [dx, dy, angle] of DIRS) {
+    const nx = cx + dx;
+    const ny = cy + dy;
+    if (nx >= 0 && nx < cols && ny >= 0 && ny < rows && grid[ny]?.[nx]?.type === 'ROAD') {
+      return angle;
     }
   }
-  if (bestDist === Infinity) return 0;
-  // 将 grid 差值映射到四个主方向（卡主方位）
-  // 模型正面在 +Z，旋转让正面指向道路方向
-  // grid dy>0 = 3D +Z = 南, dx>0 = 3D +X = 东
-  const absDx = Math.abs(bestDx);
-  const absDy = Math.abs(bestDy);
-  if (absDy >= absDx) {
-    // 主要在南北方向
-    return bestDy >= 0 ? 0 : Math.PI; // 南=0, 北=π
+
+  // 第二步：BFS 找最近道路（记录从起点出发的第一步方向）
+  // 关键：用 Map 存每个格子的"到达它时的初始方向角度"
+  // BFS 保证先到的距离最近，同层级全部探索完再进入下一层
+  const visited = new Set<string>();
+  visited.add(`${cx},${cy}`);
+  // 每个元素: [x, y, 从起点第一步的方向角度]
+  let currentLayer: [number, number, number][] = [];
+
+  // 初始化第一层：从起点出发的四个方向
+  for (const [dx, dy, angle] of DIRS) {
+    const nx = cx + dx;
+    const ny = cy + dy;
+    const key = `${nx},${ny}`;
+    if (nx >= 0 && nx < cols && ny >= 0 && ny < rows && !visited.has(key)) {
+      visited.add(key);
+      if (grid[ny]?.[nx]?.type === 'ROAD') {
+        return angle; // 距离1就找到了
+      }
+      currentLayer.push([nx, ny, angle]);
+    }
   }
-  // 主要在东西方向
-  return bestDx > 0 ? -Math.PI / 2 : Math.PI / 2; // 东=-π/2, 西=π/2
+
+  // 逐层 BFS
+  while (currentLayer.length > 0) {
+    const nextLayer: [number, number, number][] = [];
+    // 检查当前层是否有道路（收集所有找到的方向并投票）
+    const foundAngles: number[] = [];
+
+    for (const [qx, qy, firstAngle] of currentLayer) {
+      for (const [dx, dy] of DIRS) {
+        const nx = qx + dx;
+        const ny = qy + dy;
+        const key = `${nx},${ny}`;
+        if (nx < 0 || nx >= cols || ny < 0 || ny >= rows || visited.has(key)) continue;
+        visited.add(key);
+        if (grid[ny]?.[nx]?.type === 'ROAD') {
+          foundAngles.push(firstAngle);
+        } else {
+          nextLayer.push([nx, ny, firstAngle]);
+        }
+      }
+    }
+
+    // 如果这一轮找到了道路，统计投票最多的方向
+    if (foundAngles.length > 0) {
+      const votes = new Map<number, number>();
+      for (const a of foundAngles) {
+        votes.set(a, (votes.get(a) ?? 0) + 1);
+      }
+      let bestAngle = 0;
+      let bestVotes = 0;
+      for (const [angle, count] of votes) {
+        if (count > bestVotes) {
+          bestVotes = count;
+          bestAngle = angle;
+        }
+      }
+      return bestAngle;
+    }
+
+    currentLayer = nextLayer;
+  }
+
+  return 0; // 默认朝南
 }
 
 
