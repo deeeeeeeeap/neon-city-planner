@@ -16,6 +16,7 @@ const BuildingBlock = React.memo(({ type, connect, age, dayPhase, isPreview }: P
   const height = info.heightClass || 'h-8';
   const isNew = age === 0;
   const animationClass = isNew ? 'building-drop-in' : '';
+  const isPark = type === 'PARK';
 
   const style = {
     backgroundColor: info.color,
@@ -163,12 +164,25 @@ const BuildingBlock = React.memo(({ type, connect, age, dayPhase, isPreview }: P
         )}
 
         {type === 'PARK' && (
-          <div className="relative flex h-full w-full items-center justify-center bg-emerald-500/50">
-            <div className="flex h-6 w-6 items-center justify-center rounded-full border-2 border-stone-300 bg-cyan-400 shadow-inner">
-              <div className="h-3 w-3 animate-pulse rounded-full bg-cyan-300" />
+          <div className="relative flex h-full w-full items-center justify-center overflow-hidden rounded-[2px] bg-emerald-500/50">
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_30%,rgba(255,255,255,0.16),transparent_40%),radial-gradient(circle_at_70%_70%,rgba(16,185,129,0.3),transparent_48%)]" />
+            <div className={`flex items-center justify-center rounded-full border-2 border-stone-300 bg-cyan-400 shadow-inner ${isPreview ? 'h-5 w-5' : 'h-6 w-6'}`}>
+              <div className={`rounded-full bg-cyan-300 ${isPreview ? 'h-2.5 w-2.5' : 'h-3 w-3 animate-pulse'}`} />
             </div>
-            <TreePine size={24} className="absolute -left-2 -top-4 text-emerald-900 drop-shadow-lg" style={{ transform: 'rotateX(-45deg)' }} />
-            <TreePine size={20} className="absolute -bottom-2 -right-1 text-emerald-800 drop-shadow-lg" style={{ transform: 'rotateX(-45deg)' }} />
+            {!isPreview && (
+              <>
+                <TreePine
+                  size={18}
+                  className="absolute left-0 top-0 text-emerald-900 drop-shadow-lg"
+                  style={{ transform: 'rotateX(-45deg) translate(-2px, -4px)' }}
+                />
+                <TreePine
+                  size={16}
+                  className="absolute bottom-0 right-0 text-emerald-800 drop-shadow-lg"
+                  style={{ transform: 'rotateX(-45deg) translate(2px, 4px)' }}
+                />
+              </>
+            )}
           </div>
         )}
 
