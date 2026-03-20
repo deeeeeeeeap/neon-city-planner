@@ -15,13 +15,11 @@ interface Props {
 }
 
 const RoadTile = ({ connect, preview = false }: { connect: { top: boolean; bottom: boolean; left: boolean; right: boolean }; preview?: boolean }) => {
-  const asphalt = preview ? 'bg-slate-500/80' : 'bg-slate-600';
-  const shoulder = preview ? 'bg-slate-500/25' : 'bg-slate-800/80';
-  const edgeLine = preview ? 'border-white/35' : 'border-white/45';
-  const centerLine = preview ? 'border-amber-100/45' : 'border-amber-100/70';
+  const asphalt = preview ? 'bg-slate-500/75' : 'bg-slate-600';
+  const centerLine = preview ? 'border-amber-100/40' : 'border-amber-100/70';
 
   const RoadArm = ({ className }: { className: string }) => (
-    <div className={`absolute ${className} ${asphalt} shadow-[inset_0_0_0_1px_rgba(255,255,255,0.03)]`} />
+    <div className={`absolute ${className} ${asphalt} shadow-[inset_0_0_0_1px_rgba(255,255,255,0.03),0_1px_2px_rgba(15,23,42,0.35)]`} />
   );
 
   const Marking = ({ className, vertical = false }: { className: string; vertical?: boolean }) => (
@@ -32,20 +30,22 @@ const RoadTile = ({ connect, preview = false }: { connect: { top: boolean; botto
 
   return (
     <div className="pointer-events-none absolute inset-0 flex items-center justify-center" style={{ transform: 'translateZ(1px)' }}>
-      <div className={`absolute inset-0 rounded-[8px] ${shoulder}`} />
-      <RoadArm className="left-1/2 top-1/2 h-6 w-6 -translate-x-1/2 -translate-y-1/2 rounded-[4px]" />
-      {connect.top && <RoadArm className="left-1/2 top-0 h-[55%] w-6 -translate-x-1/2 rounded-t-[4px]" />}
-      {connect.bottom && <RoadArm className="bottom-0 left-1/2 h-[55%] w-6 -translate-x-1/2 rounded-b-[4px]" />}
-      {connect.left && <RoadArm className="left-0 top-1/2 h-6 w-[55%] -translate-y-1/2 rounded-l-[4px]" />}
-      {connect.right && <RoadArm className="right-0 top-1/2 h-6 w-[55%] -translate-y-1/2 rounded-r-[4px]" />}
+      <RoadArm className="left-1/2 top-1/2 h-5 w-5 -translate-x-1/2 -translate-y-1/2 rounded-[3px]" />
+      {connect.top && <RoadArm className="left-1/2 top-0 h-[56%] w-5 -translate-x-1/2 rounded-t-[3px]" />}
+      {connect.bottom && <RoadArm className="bottom-0 left-1/2 h-[56%] w-5 -translate-x-1/2 rounded-b-[3px]" />}
+      {connect.left && <RoadArm className="left-0 top-1/2 h-5 w-[56%] -translate-y-1/2 rounded-l-[3px]" />}
+      {connect.right && <RoadArm className="right-0 top-1/2 h-5 w-[56%] -translate-y-1/2 rounded-r-[3px]" />}
 
-      <div className={`absolute inset-[5px] rounded-[6px] border ${edgeLine}`} />
-      {connect.top && <Marking className="left-1/2 top-0 h-[42%] -translate-x-1/2" vertical />}
-      {connect.bottom && <Marking className="bottom-0 left-1/2 h-[42%] -translate-x-1/2" vertical />}
-      {connect.left && <Marking className="left-0 top-1/2 w-[42%] -translate-y-1/2" />}
-      {connect.right && <Marking className="right-0 top-1/2 w-[42%] -translate-y-1/2" />}
+      {connect.top && <Marking className="left-1/2 top-[2px] h-[38%] -translate-x-1/2" vertical />}
+      {connect.bottom && <Marking className="bottom-[2px] left-1/2 h-[38%] -translate-x-1/2" vertical />}
+      {connect.left && <Marking className="left-[2px] top-1/2 w-[38%] -translate-y-1/2" />}
+      {connect.right && <Marking className="right-[2px] top-1/2 w-[38%] -translate-y-1/2" />}
 
-      <div className={`absolute left-1/2 top-1/2 h-1.5 w-1.5 -translate-x-1/2 -translate-y-1/2 rounded-full ${preview ? 'bg-white/35' : 'bg-white/55'}`} />
+      {(connect.top || connect.bottom || connect.left || connect.right) && (
+        <div
+          className={`absolute left-1/2 top-1/2 h-1 w-1 -translate-x-1/2 -translate-y-1/2 rounded-full ${preview ? 'bg-white/25' : 'bg-white/45'}`}
+        />
+      )}
     </div>
   );
 };
