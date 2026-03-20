@@ -1,0 +1,29 @@
+src/App.tsx(1,8): error TS6133: 'React' is declared but its value is never read.
+src/App.tsx(15,43): error TS2339: Property 'turn' does not exist on type 'GameState'.
+src/App.tsx(15,43): error TS6133: 'turn' is declared but its value is never read.
+src/components/GameBoard.tsx(2,1): error TS6192: All imports in import declaration are unused.
+src/components/GameBoard.tsx(2,10): error TS1484: 'Cell' is a type and must be imported using a type-only import when 'verbatimModuleSyntax' is enabled.
+src/components/GameBoard.tsx(2,16): error TS1484: 'CellType' is a type and must be imported using a type-only import when 'verbatimModuleSyntax' is enabled.
+src/components/GameOverModal.tsx(2,10): error TS1484: 'Resources' is a type and must be imported using a type-only import when 'verbatimModuleSyntax' is enabled.
+src/components/GridCell.tsx(2,10): error TS1484: 'Cell' is a type and must be imported using a type-only import when 'verbatimModuleSyntax' is enabled.
+src/components/GridCell.tsx(2,16): error TS1484: 'CellType' is a type and must be imported using a type-only import when 'verbatimModuleSyntax' is enabled.
+src/components/HUD.tsx(2,10): error TS1484: 'Resources' is a type and must be imported using a type-only import when 'verbatimModuleSyntax' is enabled.
+src/components/LeaderboardModal.tsx(2,28): error TS1484: 'LeaderboardEntry' is a type and must be imported using a type-only import when 'verbatimModuleSyntax' is enabled.
+src/components/Sidebar.tsx(2,10): error TS1484: 'CellType' is a type and must be imported using a type-only import when 'verbatimModuleSyntax' is enabled.
+src/components/Sidebar.tsx(2,20): error TS1484: 'GamePhase' is a type and must be imported using a type-only import when 'verbatimModuleSyntax' is enabled.
+src/components/Sidebar.tsx(22,90): error TS6133: 'phase' is declared but its value is never read.
+src/game/builder.ts(1,10): error TS1484: 'Cell' is a type and must be imported using a type-only import when 'verbatimModuleSyntax' is enabled.
+src/game/builder.ts(1,16): error TS1484: 'CellType' is a type and must be imported using a type-only import when 'verbatimModuleSyntax' is enabled.
+src/game/builder.ts(1,26): error TS1484: 'Resources' is a type and must be imported using a type-only import when 'verbatimModuleSyntax' is enabled.
+src/game/builder.ts(1,37): error TS1484: 'GamePhase' is a type and must be imported using a type-only import when 'verbatimModuleSyntax' is enabled.
+src/game/engine.ts(1,10): error TS1484: 'Cell' is a type and must be imported using a type-only import when 'verbatimModuleSyntax' is enabled.
+src/game/engine.ts(1,16): error TS1484: 'Resources' is a type and must be imported using a type-only import when 'verbatimModuleSyntax' is enabled.
+src/game/engine.ts(1,27): error TS1484: 'TurnResult' is a type and must be imported using a type-only import when 'verbatimModuleSyntax' is enabled.
+src/game/engine.ts(1,39): error TS1484: 'EffectEvent' is a type and must be imported using a type-only import when 'verbatimModuleSyntax' is enabled.
+src/game/engine.ts(1,52): error TS1484: 'CellType' is a type and must be imported using a type-only import when 'verbatimModuleSyntax' is enabled.
+src/game/engine.ts(1,52): error TS6133: 'CellType' is declared but its value is never read.
+src/game/grid.ts(1,10): error TS1484: 'Cell' is a type and must be imported using a type-only import when 'verbatimModuleSyntax' is enabled.
+src/game/grid.ts(1,16): error TS1484: 'CellType' is a type and must be imported using a type-only import when 'verbatimModuleSyntax' is enabled.
+src/store/useGameStore.ts(2,10): error TS1484: 'GameAction' is a type and must be imported using a type-only import when 'verbatimModuleSyntax' is enabled.
+src/store/useGameStore.ts(2,22): error TS1484: 'GameState' is a type and must be imported using a type-only import when 'verbatimModuleSyntax' is enabled.
+src/store/useGameStore.ts(2,33): error TS1484: 'CellType' is a type and must be imported using a type-only import when 'verbatimModuleSyntax' is enabled.

@@ -1,0 +1,4 @@
+src/App.tsx(1,8): error TS6133: 'React' is declared but its value is never read.
+src/components/GameBoard.tsx(2,1): error TS6133: 'CellType' is declared but its value is never read.
+src/components/Sidebar.tsx(22,90): error TS6133: 'phase' is declared but its value is never read.
+src/game/engine.ts(1,57): error TS6196: 'CellType' is declared but never used.
