@@ -14,8 +14,37 @@ type LeaderboardPayload = {
 
 const app = new Hono<{ Bindings: Bindings }>();
 
+const LEADERBOARD_SCHEMA_SQL = `
+CREATE TABLE IF NOT EXISTS leaderboard (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  name TEXT NOT NULL,
+  score INTEGER NOT NULL,
+  population INTEGER NOT NULL DEFAULT 0,
+  happiness INTEGER NOT NULL DEFAULT 0,
+  pollution INTEGER NOT NULL DEFAULT 0,
+  created_at TEXT NOT NULL DEFAULT (datetime('now'))
+);
+CREATE INDEX IF NOT EXISTS idx_score ON leaderboard(score DESC, created_at ASC);
+`;
+
+let schemaReadyPromise: Promise<void> | null = null;
+
 function jsonError(message: string, status: number) {
   return Response.json({ success: false, error: message }, { status });
+}
+
+async function ensureLeaderboardSchema(db: D1Database) {
+  if (!schemaReadyPromise) {
+    schemaReadyPromise = db
+      .exec(LEADERBOARD_SCHEMA_SQL)
+      .then(() => undefined)
+      .catch((error) => {
+        schemaReadyPromise = null;
+        throw error;
+      });
+  }
+
+  await schemaReadyPromise;
 }
 
 function normalizeLimit(rawValue: string | undefined) {
@@ -79,6 +108,8 @@ app.get('/api/leaderboard', async (c) => {
   const limit = normalizeLimit(c.req.query('limit'));
 
   try {
+    await ensureLeaderboardSchema(c.env.DB);
+
     const { results } = await c.env.DB.prepare(
       `SELECT id, name, score, population, happiness, pollution, created_at
        FROM leaderboard
@@ -111,6 +142,8 @@ app.post('/api/leaderboard', async (c) => {
   }
 
   try {
+    await ensureLeaderboardSchema(c.env.DB);
+
     const result = await c.env.DB.prepare(
       `INSERT INTO leaderboard (name, score, population, happiness, pollution)
        VALUES (?, ?, ?, ?, ?)`,
